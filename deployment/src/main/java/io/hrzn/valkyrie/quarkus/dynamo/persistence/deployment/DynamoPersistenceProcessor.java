@@ -2,6 +2,8 @@ package io.hrzn.valkyrie.quarkus.dynamo.persistence.deployment;
 
 import io.hrzn.valkyrie.quarkus.dynamo.persistence.runtime.DynamoPersistenceRecorder;
 import io.hrzn.valkyrie.quarkus.dynamo.persistence.deployment.items.*;
+import io.hrzn.valkyrie.quarkus.dynamo.persistence.runtime.boot.DynamoClassDescriptor;
+import io.hrzn.valkyrie.quarkus.dynamo.persistence.runtime.boot.DynamoScanner;
 import io.quarkus.arc.deployment.BeanContainerListenerBuildItem;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
@@ -43,10 +45,17 @@ public final class DynamoPersistenceProcessor {
 
         recorder.enlistAllEntitiesFound(domainObjects.getEntityClassNames());
 
-        // TODO: Fix this listener that doesn't have anything right now.
-        beanContainerListener.produce(new BeanContainerListenerBuildItem(
-                container -> {}
-        ));
+        /* There is a container listener supposed to listen to JPA's persistence units in Hibernate's
+        implementation, but Dynamo Persistence isn't built to support persistence units; because
+        the DynamoDB extension itself doesn't support multiple data sources. Maybe we should implement
+        a Default Persistence Unit if in the future the Quarkus extension starts to support multiple
+        data sources.
+
+         beanContainerListener.produce(new BeanContainerListenerBuildItem(
+                 container -> {}
+         ));
+
+        */
     }
 
     @BuildStep
@@ -90,6 +99,17 @@ public final class DynamoPersistenceProcessor {
                 nonDynamoModelClasses, ignorableNonIndexedClasses);
         final DynamoEntitiesBuildItem domainObjects = scavenger.discoverModelAndRegisterForReflection();
         domainObjectsProducer.produce(domainObjects);
+    }
+
+    public static DynamoScanner buildDynamoScanner(DynamoEntitiesBuildItem domainObjects) {
+        DynamoScanner scanner = new DynamoScanner();
+        Set<DynamoClassDescriptor> classDescriptors = new HashSet<>();
+        domainObjects.getModelClassNames().parallelStream().forEach(model -> {
+            DynamoClassDescriptor descriptor = new DynamoClassDescriptor(model);
+            classDescriptors.add(descriptor);
+        });
+        scanner.setClassDescriptors(classDescriptors);
+        return scanner;
     }
 
     private boolean hasEntities(DynamoEntitiesBuildItem dynamoEntities,

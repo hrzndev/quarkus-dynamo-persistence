@@ -1,5 +1,6 @@
 package io.hrzn.valkyrie.quarkus.dynamo.persistence.runtime;
 
+import io.quarkus.arc.runtime.BeanContainerListener;
 import io.quarkus.runtime.annotations.Recorder;
 import org.jboss.logging.Logger;
 

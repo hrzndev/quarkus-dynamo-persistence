@@ -2,6 +2,7 @@ package io.hrzn.valkyrie.quarkus.dynamo.persistence.deployment;
 
 import io.hrzn.valkyrie.quarkus.dynamo.persistence.deployment.items.DynamoEntitiesBuildItem;
 import io.hrzn.valkyrie.quarkus.dynamo.persistence.runtime.annotations.DynamoEntity;
+import io.hrzn.valkyrie.quarkus.dynamo.persistence.runtime.annotations.DynamoSuperClass;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import io.quarkus.deployment.configuration.ConfigurationError;
@@ -11,11 +12,15 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-// https://github.com/quarkusio/quarkus/blob/c50a54b83a5fc7ae9d5683465372a45df51590d2/extensions/
-// hibernate-orm/deployment/src/main/java/io/quarkus/hibernate/orm/deployment/JpaJandexScavenger.java#L73
+/**
+ * A Jandex Scavenger for classes related to Dynamo Persistence, including DynamoEntity and
+ * Dynamo SuperClass. This scavenger implementation is based of Emmanuel & Sanne's Hibernate
+ * ORM extension JPA Scanner.
+ * @author Whiteflag <dev.whiteflag@gmail.com>
+ */
 final class DynamoJandexScavenger {
     private static final DotName DYNAMO_ENTITY = DotName.createSimple(DynamoEntity.class.getName());
+    private static final DotName DYNAMO_SUPERCLASS = DotName.createSimple(DynamoSuperClass.class.getSimpleName());
     private static final DotName ENUM = DotName.createSimple(Enum.class.getName());
 
     private final BuildProducer<ReflectiveClassBuildItem> reflectiveClass;
@@ -39,6 +44,8 @@ final class DynamoJandexScavenger {
 
         enlistDynamoModelClasses(indexView, domainObjectCollector, enumTypeCollector, javaTypeCollector,
                 DYNAMO_ENTITY, unindexedClasses);
+        enlistDynamoModelClasses(indexView, domainObjectCollector, enumTypeCollector, javaTypeCollector, DYNAMO_SUPERCLASS,
+                unindexedClasses);
 
         domainObjectCollector.registerAllForReflection(reflectiveClass);
 
@@ -66,7 +73,6 @@ final class DynamoJandexScavenger {
                                 "for your dependency via the Maven plugin, quarkus.index-dependency properties.");
             }
         }
-
         return domainObjectCollector;
     }
 

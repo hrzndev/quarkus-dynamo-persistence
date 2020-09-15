@@ -11,6 +11,12 @@ import java.util.Objects;
 public class DynamoClassDescriptor {
     private String name;
 
+    public DynamoClassDescriptor() {}
+
+    public DynamoClassDescriptor(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }

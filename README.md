@@ -8,24 +8,10 @@
 
 <div><img src="https://i.ibb.co/xHPdzKf/hrzn-favicon-1.png" alt="hrzn Mini Logo" width="100vw"/></div>
 
-# Valkyrie Microservice Library
+# Valkyrie - Quarkus DynamoDB Persistence Extension
 
-> Valkyrie Microservice is a Monorepo Maven library for use with quarkus-based microservices, with a modern tech stack.
-
-## Modules
-
-- ``universe`` ![universe-version](https://img.shields.io/badge/version-1.0.0-green?style=flat-square) 
-- ``batch`` ![batch-version](https://img.shields.io/badge/version-1.0.0-green?style=flat-square) 
-- ``blaze`` ![blaze-version](https://img.shields.io/badge/version-1.0.0-green?style=flat-square) 
-- ``core`` ![core-version](https://img.shields.io/badge/version-1.0.0-green?style=flat-square) 
-- ``dynamo-persistence`` ![dynamo-persistence-version](https://img.shields.io/badge/version-1.0.0-green?style=flat-square) 
-- ``dynamodb`` ![dynamodb-persistence-version](https://img.shields.io/badge/version-1.0.0-green?style=flat-square)
-- ``elasticsearch`` ![elasticsearch-version](https://img.shields.io/badge/version-1.0.0-green?style=flat-square) 
-- ``jaxrs`` ![jaxrs-version](https://img.shields.io/badge/version-1.0.0-green?style=flat-square) 
-- ``lambda`` ![lambda-version](https://img.shields.io/badge/version-1.0.0-green?style=flat-square) 
-- ``persistence`` ![persistence-version](https://img.shields.io/badge/version-1.0.0-green?style=flat-square) 
-- ``postgresql`` ![postgresql-version](https://img.shields.io/badge/version-1.0.0-green?style=flat-square) 
-- ``security`` ![security-version](https://img.shields.io/badge/version-1.0.0-green?style=flat-square) 
+> DynamoDB Persistence Extension is a quarkus extension for use with dynamodb databases, enabling JPA-like
+> persistence abstraction.
 
 ## Metadata
 
